@@ -31,7 +31,7 @@ services:
     volumes:
       - .:/var/www
     ports:
-      - '9000'
+      - '9000:9000'
   nginx:
     build:
       context: ./docker/nginx
