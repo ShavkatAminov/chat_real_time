@@ -1,5 +1,7 @@
 <template>
-  <tree/>
+  <div>
+    hello world!
+  </div>
 </template>
 
 <script>
