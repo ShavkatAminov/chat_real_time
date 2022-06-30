@@ -14,6 +14,13 @@ RUN curl -sS https://getcomposer.org/installer | \
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
+RUN apt install nodejs -y
+
+RUN npm config set registry http://registry.npmjs.org/
+
+
 COPY . ./
 RUN composer install
 

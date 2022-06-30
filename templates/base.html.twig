@@ -34,12 +34,11 @@
             </ul>
         </div>
     </nav>
-        <div id="app">
+        <div>
             {% block body %}{% endblock %}
         </div>
         {% block javascripts %}
-            <script src="{{ asset('build/js/app.js') }}"></script>
-            <script src="{{ asset('build/runtime.js') }}"></script>
+            {{ encore_entry_script_tags('js/app') }}
         {% endblock %}
     </body>
 </html>

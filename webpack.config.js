@@ -29,7 +29,9 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
 
-
+    .addAliases({
+        '@': `${__dirname}/assets`,
+    })
 
     // enables Sass/SCSS support
     //.enableSassLoader()
