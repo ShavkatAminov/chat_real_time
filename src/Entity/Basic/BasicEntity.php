@@ -10,12 +10,12 @@ class BasicEntity
      * @ORM\Column(type="integer")
      *
      */
-    private $createdAt;
+    private int $createdAt;
 
     /**
      * @ORM\Column(type="integer")
      *
      */
-    private $updatedAt;
+    private int $updatedAt;
 
 }

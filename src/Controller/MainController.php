@@ -2,12 +2,21 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
+use App\service\UserService;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
+    public function __construct(private UserService $service)
+    {
+
+    }
+
     /**
      * @Route("/", name="app_main")
      */
@@ -22,4 +31,18 @@ class MainController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
     }
+
+    /**
+     * @Route("/user-list", name="app_user-list")
+     */
+    public function list(): Response
+    {
+        if($this->getUser()) {
+            return new JsonResponse($this->service->getOtherUserList($this->getUser()->getId()), 200, ["Content-Type" => "application/json"]);
+        }
+        $this->createNotFoundException();
+        return  Response::create('');
+    }
+
+
 }

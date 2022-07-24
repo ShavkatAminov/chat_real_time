@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Hello workdkd
+  <div class="container">
+    <user-list/>
   </div>
 </template>
 
@@ -15,7 +15,9 @@ export default {
   },
 
   beforeCreate() {
-    console.log('before create APP component');
+  },
+
+  created: function() {
   }
 }
 </script>
