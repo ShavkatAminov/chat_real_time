@@ -13,8 +13,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @ORM\HasLifecycleCallbacks
  */
-class User  implements UserInterface, PasswordAuthenticatedUserInterface
+class User extends BasicEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -39,6 +40,12 @@ class User  implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private string $password;
 
+    /**
+     * @var string The hashed key
+     * @ORM\Column(type="string", unique=true, length=36, nullable=false)
+     */
+    private string $hashKey;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +54,16 @@ class User  implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function getHashKey(): ?string
+    {
+        return $this->hashKey;
+    }
+
+    public function setHashKey(string $value)
+    {
+        $this->hashKey = $value;
     }
 
     public function setEmail(string $email): self

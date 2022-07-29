@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
-use App\service\UserService;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
-    public function __construct(private UserService $service)
+    public function __construct(private UserRepository $repository)
     {
 
     }
@@ -25,6 +24,7 @@ class MainController extends AbstractController
         if($this->getUser()) {
             return $this->render('main/index.html.twig', [
                 'controller_name' => 'MainController',
+                'hashKey' => $this->repository->updateHashKey($this->getUser()),
             ]);
         }
         else {
@@ -38,7 +38,7 @@ class MainController extends AbstractController
     public function list(): Response
     {
         if($this->getUser()) {
-            return new JsonResponse($this->service->getOtherUserList($this->getUser()->getId()), 200, ["Content-Type" => "application/json"]);
+            return new JsonResponse($this->repository->findOthers($this->getUser()->getId()), 200, ["Content-Type" => "application/json"]);
         }
         $this->createNotFoundException();
         return  Response::create('');
