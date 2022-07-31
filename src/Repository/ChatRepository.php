@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Chat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Message;
 
 /**
  * @extends ServiceEntityRepository<Chat>
@@ -39,28 +41,32 @@ class ChatRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Chat[] Returns an array of Chat objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function createMessageAndChatIfNeeded(int $firstUserId, int $secondUserId, string $content): bool
+    {
+        $em = $this->getEntityManager();
+        $em->beginTransaction();
+        try {
+            $chat = $this->findOneBy(['first_user' => [$firstUserId, $secondUserId], 'second_user' => [$firstUserId, $secondUserId]]);
 
-//    public function findOneBySomeField($value): ?Chat
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+            if (!$chat) {
+                $chat = new Chat();
+                $chat->setFirstUser($firstUserId);
+                $chat->setSecondUser($secondUserId);
+                $em->persist($chat);
+            }
+
+            $message = new Message();
+            $message->setChatId($chat->getId());
+            $message->setContent($content);
+            $message->setSenderIsFirst($firstUserId == $chat->getFirstUser());
+            $em->persist($message);
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            return false;
+        }
+        return true;
+    }
+
 }

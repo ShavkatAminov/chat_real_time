@@ -13,7 +13,10 @@ export default {
   components: {
     UserList
   },
-
+  data() {
+    return {
+    }
+  },
   beforeCreate() {
   },
 

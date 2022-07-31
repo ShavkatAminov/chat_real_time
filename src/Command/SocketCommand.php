@@ -3,6 +3,9 @@
 namespace App\Command;
 
 use App\Chat\Chat;
+use App\Repository\ChatRepository;
+use App\Repository\MessageRepository;
+use App\service\MessageService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,6 +19,13 @@ use Ratchet\WebSocket\WsServer;
 
 class SocketCommand extends Command
 {
+    public function __construct(string $name = null,
+                                private MessageService $messageService,
+                                private MessageRepository $messageRepository)
+    {
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this->setName('sockets:start-chat')
@@ -37,7 +47,7 @@ class SocketCommand extends Command
         $server = IoServer::factory(
             new HttpServer(
                 new WsServer(
-                    new Chat()
+                    new Chat($this->messageService, $this->messageRepository)
                 )
             ),
             8080

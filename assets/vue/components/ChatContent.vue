@@ -1,13 +1,13 @@
 <template>
-<div class="chat-content">
-  <div class="message-content">
+  <div class="chat-content">
+    <div class="message-content">
+    </div>
+    <div class="">
+      <form @submit="send">
+        <input v-model="message" type="text" class="form-control">
+      </form>
+    </div>
   </div>
-  <div class="">
-    <form @submit="send">
-      <input v-model="message" type="text" class="form-control">
-    </form>
-  </div>
-</div>
 </template>
 
 <script>
@@ -23,28 +23,44 @@ export default {
   methods: {
     send() {
       this.connection.send(this.message);
+    },
+
+    setToken() {
+      this.token = document.getElementById('app').getAttribute('data-token');
+    },
+
+    setTokenToServer() {
+      let request = {
+        'action': 'auth',
+        'token': this.token,
+      };
+      console.log(request);
+      this.connection.send(JSON.stringify(request));
     }
   },
   data() {
     return {
       message: '',
       connection: null,
+      token: '',
     }
   },
 
   created() {
+    this.setToken();
     this.connection = new WebSocket("ws://localhost:8080")
 
-    this.connection.onmessage = (event) =>  {
+    this.connection.onmessage = (event) => {
 
     }
 
-    this.connection.onopen = (event) =>  {
-
+    this.connection.onopen = (event) => {
+      this.setTokenToServer();
     }
 
     this.connection.onclose = function (event) {
     }
+
   }
 }
 </script>
@@ -53,6 +69,7 @@ export default {
 .chat-content {
   height: 600px;
 }
+
 .message-content {
   height: 90%;
 }

@@ -11,37 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Chat extends BasicEntity
 {
-    /**
-     * @return int|null
-     */
-    public function getFirstUserLastMessageRead(): ?int
-    {
-        return $this->first_user_last_message_read;
-    }
 
-    /**
-     * @param int|null $first_user_last_message_read
-     */
-    public function setFirstUserLastMessageRead(?int $first_user_last_message_read): void
-    {
-        $this->first_user_last_message_read = $first_user_last_message_read;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getSecondUserLastMessageRead(): ?int
-    {
-        return $this->second_user_last_message_read;
-    }
-
-    /**
-     * @param int|null $second_user_last_message_read
-     */
-    public function setSecondUserLastMessageRead(?int $second_user_last_message_read): void
-    {
-        $this->second_user_last_message_read = $second_user_last_message_read;
-    }
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -96,5 +66,37 @@ class Chat extends BasicEntity
         $this->second_user = $second_user;
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getFirstUserLastMessageRead(): ?int
+    {
+        return $this->first_user_last_message_read;
+    }
+
+    /**
+     * @param int|null $first_user_last_message_read
+     */
+    public function setFirstUserLastMessageRead(?int $first_user_last_message_read): void
+    {
+        $this->first_user_last_message_read = $first_user_last_message_read;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSecondUserLastMessageRead(): ?int
+    {
+        return $this->second_user_last_message_read;
+    }
+
+    /**
+     * @param int|null $second_user_last_message_read
+     */
+    public function setSecondUserLastMessageRead(?int $second_user_last_message_read): void
+    {
+        $this->second_user_last_message_read = $second_user_last_message_read;
     }
 }

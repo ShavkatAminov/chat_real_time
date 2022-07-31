@@ -22,13 +22,14 @@ import ChatContent from "@/vue/components/ChatContent";
 export default {
   name: 'UserList',
   components: {UserItem, ChatContent},
-  props: {},
+  props: {
+  },
   data() {
     return {
       userList: [],
       selectedUser: {
         id: Number,
-      }
+      },
     }
   },
   mounted() {
