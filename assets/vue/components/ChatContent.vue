@@ -5,7 +5,7 @@
     </div>
     <div class="">
       <form action="#" @submit="send">
-        <input v-model="message" type="text" class="form-control">
+        <input v-model="typedText" type="text" class="form-control">
       </form>
     </div>
   </div>
@@ -29,7 +29,7 @@ export default {
       let request = {
         'action': 'message',
         'user_id': this.user.id,
-        'content': this.message,
+        'content': this.typedText,
       };
       this.sendWithStringify(request);
       return false;
@@ -59,8 +59,20 @@ export default {
       }
       this.sendWithStringify(request);
     },
+
+    message(data) {
+      if(data.user_id == this.user.id) {
+        this.messageList.push(data);
+        if(data.isSent) {
+          this.typedText = '';
+        }
+      }
+    },
     setList(data) {
-      this.messageList = data;
+      this.messageList = data.messages.map(item => ({
+        ...item,
+        isSent: ((data.isSenderIsFirst && item.sender_is_first == 1) || (!data.isSenderIsFirst && item.sender_is_first == 0))
+      }));
     }
   },
   watch: {
@@ -70,7 +82,7 @@ export default {
   },
   data() {
     return {
-      message: '',
+      typedText: '',
       connection: null,
       token: '',
       messageList: [],
@@ -83,7 +95,7 @@ export default {
 
     this.connection.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      this[data.method](data.messages);
+      this[data.method](data.data);
     }
 
     this.connection.onopen = (event) => {
@@ -99,6 +111,7 @@ export default {
 
 <style scoped>
 .chat-content {
+  background-color: #cbd7e0;
   height: 600px;
 }
 

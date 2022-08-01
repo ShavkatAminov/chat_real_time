@@ -3,9 +3,11 @@
 namespace App\service;
 
 use App\Entity\Message;
+use App\Entity\User;
 use App\Repository\ChatRepository;
 use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
+use phpDocumentor\Reflection\Types\This;
 
 class MessageService
 {
@@ -16,12 +18,8 @@ class MessageService
     )
     {}
 
-    public function createMessage($token, $secondUserId, $message): bool {
-        $sender = $this->userRepository->getByHashKey($token);
-        if($sender) {
-            return $this->chatRepository->createMessageAndChatIfNeeded($sender->getId(), $secondUserId, $message);
-        }
-        return false;
+    public function createMessage($senderId, $secondUserId, $message): bool {
+        return $this->chatRepository->createMessageAndChatIfNeeded($senderId, $secondUserId, $message);
     }
 
     public function getUserHashById(int $id): string {
@@ -31,14 +29,17 @@ class MessageService
         return "";
     }
 
-    public function list($token, $secondUserId): array {
-        $sender = $this->userRepository->getByHashKey($token);
-        $chat = $this->chatRepository->findOneBy(['first_user' => [$sender->getId(), $secondUserId], 'second_user' => [$sender->getId(), $secondUserId]]);
+    public function getUserByHash(string $token): User | null {
+        return $this->userRepository->getByHashKey($token);
+    }
+
+    public function list($senderId, $secondUserId): array {
+        $chat = $this->chatRepository->findOneBy(['first_user' => [$senderId, $secondUserId], 'second_user' => [$senderId, $secondUserId]]);
         if(!$chat)
-            return [];
+            return ['message' => [], 'isSenderIsFirst' => false];
         return [
             'messages' => $this->messageRepository->getListByChat($chat->getId()),
-            'isSenderIsFirst' => $sender->getRoles() == $chat->getFirstUser(),
+            'isSenderIsFirst' => $senderId == $chat->getFirstUser(),
         ];
     }
 }

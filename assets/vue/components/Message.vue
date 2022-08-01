@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="message" :class="{'send': message.isSent, 'received' : !message.isSent}">
   {{message.content}}
 </div>
 </template>
@@ -10,11 +10,28 @@ export default {
   props: {
     message: {
       content: String,
+      isSent: Boolean,
     }
   },
+  created() {
+  }
 }
 </script>
 
 <style scoped>
 
+.message {
+  margin: 15px;
+  padding: 10px 15px;
+}
+
+.received {
+  margin-right: 20%;
+  background-color: white;
+}
+
+.send {
+  margin-left: 20%;
+  background-color: #0ce10c;
+}
 </style>

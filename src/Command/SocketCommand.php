@@ -47,7 +47,7 @@ class SocketCommand extends Command
         $server = IoServer::factory(
             new HttpServer(
                 new WsServer(
-                    new Chat($this->messageService, $this->messageRepository)
+                    new Chat($this->messageService)
                 )
             ),
             8080

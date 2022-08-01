@@ -18,7 +18,6 @@ class Chat implements MessageComponentInterface {
 
     public function __construct(
         private MessageService $messageService,
-        private MessageRepository $messageRepository
     ) {
         $this->clients = new \SplObjectStorage;
     }
