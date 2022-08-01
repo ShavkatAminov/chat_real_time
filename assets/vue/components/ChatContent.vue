@@ -115,7 +115,12 @@ export default {
   height: 600px;
 }
 
+input {
+  border: 1px solid black;
+}
+
 .message-content {
-  height: 90%;
+  overflow-x: auto;
+  height: calc(100% - 38px);
 }
 </style>

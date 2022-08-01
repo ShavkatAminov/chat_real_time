@@ -23,6 +23,7 @@ export default {
 .message {
   margin: 15px;
   padding: 10px 15px;
+  border-radius: 5px;
 }
 
 .received {

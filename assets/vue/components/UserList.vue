@@ -1,12 +1,12 @@
 <template>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 padding-null">
       <ul class="list-group">
         <user-item @click="select(user)" v-for="user in userList" :user="user">
         </user-item>
       </ul>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9 padding-null">
       <chat-content v-if="selectedUser.id !== 0" :user="selectedUser">
       </chat-content>
     </div>
@@ -58,5 +58,8 @@ export default {
 <style scoped>
 .user-list {
   background-color: gray;
+}
+.padding-null {
+  padding: 0;
 }
 </style>
