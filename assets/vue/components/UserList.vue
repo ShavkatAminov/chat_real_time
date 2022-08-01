@@ -7,7 +7,7 @@
       </ul>
     </div>
     <div class="col-md-9">
-      <chat-content :user="selectedUser">
+      <chat-content v-if="selectedUser.id !== 0" :user="selectedUser">
       </chat-content>
     </div>
   </div>
@@ -28,7 +28,7 @@ export default {
     return {
       userList: [],
       selectedUser: {
-        id: Number,
+        id: 0,
       },
     }
   },
@@ -45,10 +45,13 @@ export default {
 
   methods: {
     select(user) {
+      this.userList.forEach(item => {
+        item.active = false
+      });
       user.active = true;
       this.selectedUser = user;
     }
-  }
+  },
 }
 </script>
 

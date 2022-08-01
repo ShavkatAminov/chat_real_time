@@ -39,6 +39,14 @@ class MessageRepository extends ServiceEntityRepository
         }
     }
 
+    public function getListByChat($id): array {
+        return $this->createQueryBuilder('c')
+            ->where('c.chat_id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
 //    /**
 //     * @return Message[] Returns an array of Message objects
 //     */

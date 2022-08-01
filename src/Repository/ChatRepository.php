@@ -53,6 +53,7 @@ class ChatRepository extends ServiceEntityRepository
                 $chat->setFirstUser($firstUserId);
                 $chat->setSecondUser($secondUserId);
                 $em->persist($chat);
+                $em->flush();
             }
 
             $message = new Message();

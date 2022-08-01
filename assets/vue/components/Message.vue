@@ -1,10 +1,17 @@
 <template>
-
+<div>
+  {{message.content}}
+</div>
 </template>
 
 <script>
 export default {
-  name: "Message"
+  name: "Message",
+  props: {
+    message: {
+      content: String,
+    }
+  },
 }
 </script>
 
