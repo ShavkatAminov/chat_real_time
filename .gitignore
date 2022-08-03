@@ -2,6 +2,7 @@
 
 ### docker files
 /docker/database/data
+/docker/database-test/data
 /docker/logs/nginx
 
 ### PhpStorm files
