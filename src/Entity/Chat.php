@@ -7,7 +7,9 @@ use App\Repository\ChatRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="`chat`")
  * @ORM\Entity(repositoryClass=ChatRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Chat extends BasicEntity
 {

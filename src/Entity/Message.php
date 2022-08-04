@@ -7,7 +7,9 @@ use App\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="`message`")
  * @ORM\Entity(repositoryClass=MessageRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Message extends BasicEntity
 {

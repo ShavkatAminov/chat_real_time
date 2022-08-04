@@ -38,16 +38,16 @@ class BasicEntity
         $this->updatedAt = $updatedAt;
     }
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true, name="created_at")
      *
      */
-    private ?int $createdAt = null;
+    protected ?int $createdAt = null;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="updated_at")
      *
      */
-    private ?int $updatedAt;
+    protected ?int $updatedAt;
 
     /**
      * @ORM\PrePersist
