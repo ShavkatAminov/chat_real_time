@@ -4,23 +4,12 @@ namespace App\Tests\Repository;
 
 use App\Entity\Chat;
 use App\Entity\Message;
-use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\Repository\Basic\BasicKernel;
 
-class ChatRepositoryTest extends KernelTestCase
+class ChatRepositoryTest extends BasicKernel
 {
 
-    private EntityManager | null $entityManager = null;
-
-    protected function setUp(): void
-    {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-
-    }
+    protected array $entities = [Chat::class, Message::class];
 
     public function testAdd() {
         $chat = new Chat();
@@ -71,20 +60,5 @@ class ChatRepositoryTest extends KernelTestCase
         $chatFind = $this->entityManager->getRepository(Chat::class)->findBy(['first_user' => 1, 'second_user' => 2]);
         $this->assertNotNull($chatFind);
         $this->assertEquals(count($chatFind), 1);
-    }
-
-
-
-    protected function tearDown(): void
-    {
-        $this->entityManager->getRepository(Chat::class)
-            ->createQueryBuilder('c')
-            ->delete()
-            ->getQuery()
-            ->execute();
-        parent::tearDown();
-        // doing this is recommended to avoid memory leaks
-        $this->entityManager->close();
-        $this->entityManager = null;
     }
 }
