@@ -11,7 +11,7 @@ class ChatRepositoryTest extends BasicKernel
 
     protected array $entities = [Chat::class, Message::class];
 
-    public function testAdd() {
+    public function testAddAndRemove() {
         $chat = new Chat();
         $chat->setFirstUser(1);
         $chat->setSecondUser(2);
@@ -24,19 +24,9 @@ class ChatRepositoryTest extends BasicKernel
         $this->assertEquals($chat, $chatFind);
         $this->assertNotNull($chat->getCreatedAt());
         $this->assertNotNull($chat->getUpdatedAt());
-    }
-
-
-    public function testRemove() {
-        $chat = new Chat();
-        $chat->setFirstUser(1);
-        $chat->setSecondUser(2);
-
         $this->entityManager->getRepository(Chat::class)
             ->remove($chat, true);
-
         $chatFind = $this->entityManager->getRepository(Chat::class)->findOneBy(['first_user' => 1, 'second_user' => 2]);
-
         $this->assertNull($chatFind);
     }
 

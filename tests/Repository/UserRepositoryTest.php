@@ -2,33 +2,40 @@
 
 namespace App\Tests\Repository;
 
-use App\Entity\Chat;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Tests\Repository\Basic\BasicKernel;
-use PHPUnit\Framework\TestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserRepositoryTest extends BasicKernel
 {
     protected array $entities = [User::class];
 
     public function testAdd() {
-        $chat = new Chat();
-        $chat->setFirstUser(1);
-        $chat->setSecondUser(2);
+        $user = new User();
+        $user->setEmail("test@mail.com");
+        $user->setHashKey("hashkey");
+        $user->setPassword(
+            'dcdcdcdc dcdcdcddcdcd'
+        );
+        $user->setRoles([]);
+        $this->entityManager->getRepository(User::class)
+            ->add($user, true);
 
-        $this->entityManager->getRepository(Chat::class)
-            ->add($chat, true);
+        $userFind = $this->entityManager->getRepository(User::class)->find($user->getId());
 
-        $chatFind = $this->entityManager->getRepository(Chat::class)->findOneBy(['first_user' => 1, 'second_user' => 2]);
+        $this->assertEquals($user, $userFind);
+        $this->assertNotNull($user->getCreatedAt());
+        $this->assertNotNull($user->getUpdatedAt());
+        $this->entityManager->getRepository(User::class)
+            ->remove($user, true);
 
-        $this->assertEquals($chat, $chatFind);
-        $this->assertNotNull($chat->getCreatedAt());
-        $this->assertNotNull($chat->getUpdatedAt());
+        $userFind = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'test@mail.com']);
+        $this->assertNull($userFind);
     }
 
 
-    public function testRemove() {
+   /* public function testUpgradePassword() {
         $chat = new Chat();
         $chat->setFirstUser(1);
         $chat->setSecondUser(2);
@@ -39,5 +46,5 @@ class UserRepositoryTest extends BasicKernel
         $chatFind = $this->entityManager->getRepository(Chat::class)->findOneBy(['first_user' => 1, 'second_user' => 2]);
 
         $this->assertNull($chatFind);
-    }
+    }*/
 }
