@@ -10,7 +10,7 @@ class MessageRepositoryTest extends BasicKernel
 {
     protected array $entities = [Message::class];
 
-    public function testAdd()
+    public function testAddAndRemove()
     {
         $message = new Message();
         $message->setChatId(1);

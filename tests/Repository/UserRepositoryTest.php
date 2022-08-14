@@ -11,18 +11,11 @@ class UserRepositoryTest extends BasicKernel
 {
     protected array $entities = [User::class];
 
-    public function testAdd() {
-        $user = new User();
-        $user->setEmail("test@mail.com");
-        $user->setHashKey("hashkey");
-        $user->setPassword(
-            'dcdcdcdc dcdcdcddcdcd'
-        );
-        $user->setRoles([]);
-        $this->entityManager->getRepository(User::class)
-            ->add($user, true);
+    public function testAddAndRemove() {
 
-        $userFind = $this->entityManager->getRepository(User::class)->find($user->getId());
+
+        $user = $this->addNewUser();
+        $userFind = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'test@mail.com']);
 
         $this->assertEquals($user, $userFind);
         $this->assertNotNull($user->getCreatedAt());
@@ -34,17 +27,54 @@ class UserRepositoryTest extends BasicKernel
         $this->assertNull($userFind);
     }
 
+    public function addNewUser(): User {
+        $user = new User();
+        $user->setEmail("test@mail.com");
+        $user->setHashKey("hashkey");
+        $user->setPassword(
+            'dcdcdcdc dcdcdcddcdcd'
+        );
+        $user->setRoles([]);
+        $this->entityManager->getRepository(User::class)
+            ->add($user, true);
+        return $user;
+    }
 
-   /* public function testUpgradePassword() {
-        $chat = new Chat();
-        $chat->setFirstUser(1);
-        $chat->setSecondUser(2);
 
-        $this->entityManager->getRepository(Chat::class)
-            ->remove($chat, true);
+    public function testUpgradePassword() {
 
-        $chatFind = $this->entityManager->getRepository(Chat::class)->findOneBy(['first_user' => 1, 'second_user' => 2]);
+        $user = $this->addNewUser();
+        $this->entityManager->getRepository(User::class)
+            ->upgradePassword($user, "djhsbcjhbjdbhjshbcjshbdjhbsdhc");
+        $this->assertEquals($user->getPassword(), 'djhsbcjhbjdbhjshbcjshbdjhbsdhc');
 
-        $this->assertNull($chatFind);
-    }*/
+    }
+
+    public function testUpdateHashKey() {
+        $user = $this->addNewUser();
+        $this->entityManager->getRepository(User::class)
+            ->updateHashKey($user);
+
+        $this->assertNotEquals($user->getHashKey(), 'hashkey');
+    }
+
+    public function testGetByHashKey() {
+        $this->addNewUser();
+        $user = $this->entityManager->getRepository(User::class)
+            ->getByHashKey('hashkey');
+        $userFind = $this->entityManager->getRepository(User::class)->findOneBy(['hashKey' => 'hashkey']);
+        $this->assertEquals($user, $userFind);
+    }
+    public function testFindOthers() {
+        $user = $this->addNewUser();
+        $users = $this->entityManager->getRepository(User::class)
+            ->findOthers($user->getId());
+        $userFind = $this->entityManager->getRepository(User::class)
+            ->createQueryBuilder('u')
+            ->where('u.id != :val')
+            ->setParameter('val', $user->getId())
+            ->getQuery()
+            ->getArrayResult();
+        $this->assertEquals($users, $userFind);
+    }
 }
