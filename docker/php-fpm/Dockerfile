@@ -12,8 +12,6 @@ WORKDIR /var/www
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin/ --filename=composer
 
-RUN curl -sS https://get.symfony.com/cli/installer | bash
-RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
 RUN apt install nodejs -y

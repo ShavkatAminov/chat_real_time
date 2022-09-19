@@ -65,3 +65,9 @@ services:
       - "8000:80"
       - "443:443"
 
+  redis:
+    restart: "no"
+    container_name: chat_redis
+    image: redis
+    expose:
+      - "6379"
