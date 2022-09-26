@@ -27,9 +27,15 @@ class Chat implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
-        $request = json_decode($msg, true);
-        if($request && isset($request['action']) && $request['action']) {
-            call_user_func([$this, $request['action']], $from, $request);
+        try{
+            $request = json_decode($msg, true);
+            if($request && isset($request['action']) && $request['action']) {
+                call_user_func([$this, $request['action']], $from, $request);
+            }
+        }
+        catch(\Exception $e){
+           /* echo 'error try catch';
+            print_r($e->getMessage());*/
         }
     }
 

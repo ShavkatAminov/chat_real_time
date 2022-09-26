@@ -73,6 +73,27 @@ export default {
         ...item,
         isSent: ((data.isSenderIsFirst && item.sender_is_first == 1) || (!data.isSenderIsFirst && item.sender_is_first == 0))
       }));
+    },
+    connectionToServer() {
+      this.setToken();
+      this.connection = new WebSocket("ws://localhost:8080")
+
+      this.connection.onmessage = (event) => {
+        let data = JSON.parse(event.data);
+        this[data.method](data.data);
+      }
+
+      this.connection.onopen = () => {
+        this.setTokenToServer();
+        this.getList();
+      }
+
+      this.connection.onclose = () => {
+        this.connectionToServer();
+      }
+
+      this.connection.onerror = (err) => {
+      }
     }
   },
   watch: {
@@ -90,21 +111,7 @@ export default {
   },
 
   created() {
-    this.setToken();
-    this.connection = new WebSocket("ws://localhost:8080")
-
-    this.connection.onmessage = (event) => {
-      let data = JSON.parse(event.data);
-      this[data.method](data.data);
-    }
-
-    this.connection.onopen = (event) => {
-      this.setTokenToServer();
-      this.getList();
-    }
-
-    this.connection.onclose = function (event) {
-    }
+    this.connectionToServer();
   }
 }
 </script>

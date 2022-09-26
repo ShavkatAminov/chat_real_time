@@ -28,7 +28,7 @@ class SocketCommand extends Command
 
     protected function configure()
     {
-        $this->setName('sockets:start-chat')
+        $this->setName('start-chat')
             // the short description shown while running "php bin/console list"
             ->setHelp("Starts the chat socket demo")
             // the full command description shown when running the command with
@@ -39,8 +39,6 @@ class SocketCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([
-            'Chat socket',// A line
-            '============',// Another line
             'Starting chat, open your browser.',// Empty line
         ]);
 
