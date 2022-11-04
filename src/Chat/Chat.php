@@ -3,10 +3,8 @@
 namespace App\Chat;
 use App\Chat\traits\Auth;
 use App\Chat\traits\Message;
-use App\Repository\ChatRepository;
-use App\Repository\MessageRepository;
 use App\service\MessageService;
-use phpDocumentor\Reflection\Types\This;
+use App\service\UserActiveTimeService;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
@@ -18,6 +16,7 @@ class Chat implements MessageComponentInterface {
 
     public function __construct(
         private MessageService $messageService,
+        private UserActiveTimeService $activeTimeService,
     ) {
         $this->clients = new \SplObjectStorage;
     }

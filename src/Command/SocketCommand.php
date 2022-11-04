@@ -3,9 +3,8 @@
 namespace App\Command;
 
 use App\Chat\Chat;
-use App\Repository\ChatRepository;
-use App\Repository\MessageRepository;
 use App\service\MessageService;
+use App\service\UserActiveTimeService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +20,8 @@ class SocketCommand extends Command
 {
     public function __construct(string $name = null,
                                 private MessageService $messageService,
-                                private MessageRepository $messageRepository)
+                                private UserActiveTimeService $activeTimeService,
+    )
     {
         parent::__construct($name);
     }
@@ -45,7 +45,7 @@ class SocketCommand extends Command
         $server = IoServer::factory(
             new HttpServer(
                 new WsServer(
-                    new Chat($this->messageService)
+                    new Chat($this->messageService, $this->activeTimeService)
                 )
             ),
             8080
