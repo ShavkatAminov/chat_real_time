@@ -3,6 +3,7 @@
 namespace App\Chat;
 use App\Chat\traits\Auth;
 use App\Chat\traits\Message;
+use App\Chat\traits\UserActive;
 use App\service\MessageService;
 use App\service\UserActiveTimeService;
 use Ratchet\MessageComponentInterface;
@@ -12,6 +13,7 @@ class Chat implements MessageComponentInterface {
 
     use Auth;
     use Message;
+    use UserActive;
     protected $clients;
 
     public function __construct(
@@ -31,10 +33,15 @@ class Chat implements MessageComponentInterface {
             if($request && isset($request['action']) && $request['action']) {
                 call_user_func([$this, $request['action']], $from, $request);
             }
+            $user = $this->messageService->getUserByHash($from->token);
+            if($user) {
+                $this->activeTimeService
+                    ->setUserActive($user->getId());
+            }
         }
         catch(\Exception $e){
-           /* echo 'error try catch';
-            print_r($e->getMessage());*/
+            echo 'error try catch';
+            print_r($e->getMessage());
         }
     }
 

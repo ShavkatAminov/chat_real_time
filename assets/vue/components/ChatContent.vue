@@ -68,11 +68,24 @@ export default {
         }
       }
     },
+    setOnlineList(data) {
+      console.log(data);
+      this.$store.commit('setUserActive', data);
+    },
     setList(data) {
       this.messageList = data.messages.map(item => ({
         ...item,
         isSent: ((data.isSenderIsFirst && item.sender_is_first == 1) || (!data.isSenderIsFirst && item.sender_is_first == 0))
       }));
+    },
+    getOnlineList() {
+      setTimeout(() => {
+        let request = {
+          'action': 'activeList',
+        }
+        this.sendWithStringify(request);
+        this.getOnlineList();
+      }, 1000);
     },
     connectionToServer() {
       this.setToken();
@@ -86,6 +99,7 @@ export default {
       this.connection.onopen = () => {
         this.setTokenToServer();
         this.getList();
+        this.getOnlineList();
       }
 
       this.connection.onclose = () => {

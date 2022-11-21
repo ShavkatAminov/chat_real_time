@@ -69,5 +69,5 @@ services:
     restart: "no"
     container_name: chat_redis
     image: redis
-    expose:
-      - "6379"
+    ports:
+      - "6379:6379"

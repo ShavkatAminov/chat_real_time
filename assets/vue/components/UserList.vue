@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-3 padding-null">
       <ul class="list-group">
-        <user-item @click="select(user)" v-for="user in userList" :user="user">
+        <user-item @click="select(user)" v-for="user in userList" :user="user" :online="isOnline(user.id)">
         </user-item>
       </ul>
     </div>
@@ -50,6 +50,9 @@ export default {
       });
       user.active = true;
       this.selectedUser = user;
+    },
+    isOnline(id) {
+      return this.$store.getters.findByIdUserActive(id);
     }
   },
 }

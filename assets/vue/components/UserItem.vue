@@ -1,6 +1,7 @@
 <template>
   <li @click="select" class="list-group-item" :class="{active: user.active}">
-      {{user.email}}
+    <span class="badge badge-pill badge-success online" v-if="online">&nbsp;</span>
+    {{user.email}}
   </li>
 </template>
 
@@ -12,7 +13,8 @@ export default {
       id: Number,
       email: String,
       active: Boolean,
-    }
+    },
+    online: Boolean,
   },
   data() {
     return {

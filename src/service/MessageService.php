@@ -36,7 +36,7 @@ class MessageService
     public function list($senderId, $secondUserId): array {
         $chat = $this->chatRepository->findOneBy(['first_user' => [$senderId, $secondUserId], 'second_user' => [$senderId, $secondUserId]]);
         if(!$chat)
-            return ['message' => [], 'isSenderIsFirst' => false];
+            return ['messages' => [], 'isSenderIsFirst' => false];
         return [
             'messages' => $this->messageRepository->getListByChat($chat->getId()),
             'isSenderIsFirst' => $senderId == $chat->getFirstUser(),
