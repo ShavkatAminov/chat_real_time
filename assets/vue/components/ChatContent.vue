@@ -13,14 +13,14 @@
 
 <script>
 import Message from "@/vue/components/Message";
+import User from "@/vue/models/User";
 export default {
   name: "ChatContent",
   components: {Message},
 
+  emits: ['setUserOnlineList'],
   props: {
-    user: {
-      id: Number,
-    }
+    user: User,
   },
 
   methods: {
@@ -69,8 +69,7 @@ export default {
       }
     },
     setOnlineList(data) {
-      console.log(data);
-      this.$store.commit('setUserActive', data);
+      this.$emit('setUserOnlineList', data);
     },
     setList(data) {
       this.messageList = data.messages.map(item => ({
@@ -85,7 +84,7 @@ export default {
         }
         this.sendWithStringify(request);
         this.getOnlineList();
-      }, 1000);
+      }, 10000);
     },
     connectionToServer() {
       this.setToken();
